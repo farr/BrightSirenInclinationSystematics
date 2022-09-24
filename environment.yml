@@ -11,4 +11,8 @@ dependencies:
   - pymc=4
   - scipy
   - seaborn
+  - tqdm
+  - ca-certificates
+  - certifi
+  - openssl
 prefix: /Users/wfarr/miniconda3/envs/BrightSirenInclinationSystematics
