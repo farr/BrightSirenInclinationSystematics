@@ -134,7 +134,9 @@ def calculate_P_det(trace, Nx=256):
     for cc in c:
         for dd in d:
             AA = A.isel(chain=cc, draw=dd)
-            pds.loc[dict(chain=cc, draw=dd)] = P_det(x, AA)
+            p = P_det(x, AA)
+            p /= np.trapz(p, x) # Normalize
+            pds.loc[dict(chain=cc, draw=dd)] = p
 
     trace.posterior.coords['x'] = x
     trace.posterior['P_det'] = pds
