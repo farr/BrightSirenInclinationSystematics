@@ -1,0 +1,6 @@
+{
+    "latex-workshop.latex.external.build.command": "zsh",
+    "latex-workshop.latex.external.build.args": ["-c", "PATH=\"/Users/wfarr/miniconda3/envs/showyourwork/bin:/Users/wfarr/miniconda3/condabin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/Library/Apple/usr/bin\" python -m showyourwork"],
+    "latex-workshop.view.pdf.viewer": "tab",
+    "latex-workshop.latex.outDir": "%WORKSPACE_FOLDER%"
+}
