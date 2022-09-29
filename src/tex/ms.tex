@@ -1,6 +1,7 @@
-% Define document class
-\documentclass[twocolumn]{aastex631}
+\documentclass[modern]{aastex631}
 \usepackage{showyourwork}
+
+\newcommand{\obs}{\mathrm{obs}}
 
 \newcommand{\cca}{Center for Computational Astrophysics, Flatiron Institute, New York NY 10010, USA}
 \newcommand{\sbu}{Department of Physics and Astronomy, Stony Brook University, Stony Brook NY 11794, USA}
@@ -31,26 +32,67 @@ prevent percent-level expansion history measurements with bright sirens.
 \section{Introduction}
 \label{sec:intro}
 
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-Ut purus elit, vestibulum ut, placerat ac, adipiscing vitae, felis.
-Curabitur dictum gravida mauris, consectetuer id, vulputate a, magna.
-Donec vehicula augue eu neque, morbi tristique senectus et netus et.
-Mauris ut leo, cras viverra metus rhoncus sem, nulla et lectus vestibulum.
-Phasellus eu tellus sit amet tortor gravida placerat.
-Integer sapien est, iaculis in, pretium quis, viverra ac, nunc.
-Praesent eget sem vel leo ultrices bibendum.
-Aenean faucibus, morbi dolor nulla, malesuada eu, pulvinar at, mollis ac.
-Curabitur auctor semper nulla donec varius orci eget risus.
-Duis nibh mi, congue eu, accumsan eleifend, sagittis quis, diam.
-Duis eget orci sit amet orci dignissim rutrum.
+\section{Observational Model}
 
-Nam dui ligula, fringilla a, euismod sodales, sollici- tudin vel, wisi.
-Morbi auctor lorem non justo, nam lacus libero, pretium at, lobortis vitae.
-Donec aliquet, tortor sed accumsan bibendum, erat ligula aliquet magna.
-Morbi ac orci et nisl hendrerit mollis, suspendisse ut massa, cras nec ante.
-Pellentesque a nulla cum sociis natoque penatibus et magnis dis parturient.
-Aliquam tincidunt urna, nulla ullamcorper vestibulum turpis.
-Pellentesque cursus luctus mauris \citep{Luger2021}.
+We use a simplified observational model that reproduces the essential aspects of
+gravitational wave distance measurements without requiring generating and
+inferring full gravitational waveforms.  We imagine that each gravitational wave
+event has a (cosine) inclination $x = \cos \iota$ and a distance, and these
+combine to give an amplitude in the left- and right-handed polarization
+components of 
+\begin{equation}
+    A_{R/L} = \frac{\left( 1 \pm x \right)^2}{d}
+\end{equation}
+in some units.  We assume that a detector network measures a linear projection
+of these these polarization amplitudes with unit-amplitude Gaussian noise:
+\begin{equation}
+    A_{R/L,\obs} = f_{R/L} A_{R/L} + N(0,1).
+\end{equation}
+For a detector network with two or more arbitrarily oriented, nearly
+equally-sensitive detectors, we can set $f_R = f_L = 1$; for two nearly-aligned
+equally-sensitive detectors (e.g.\ the two LIGO detectors in Washington and
+Louisiana), we can set $f_R \ll f_L = 1$ to reflect that one polarization
+component is measured much more precisely than the other.  From here onward we assume events used for bright sirens have small localization volumes and are therefore observed in three or more detectors and we set $f_L = f_R = 1$.
+
+The S/N of an observation in our model is given by 
+\begin{equation}
+    \rho^2 = \frac{A_{R,\obs}^2 + A_{L,\obs}^2}{2}.
+\end{equation}
+We impose a Euclidean prior on $d$, $p(d) \propto d^2$, appropriate for the
+nearby universe, and a flat prior on $x$, $p(x) = 1/2$, appropriate for an
+intrinsically isotropic population of GW mergers.  Inferring $d$ and $x$ from
+$A_{R,\obs}$ and $A_{L,\obs}$ in our model results in posterior densities that
+reproduce the distance-inclination correlation observed in analysis of actual GW
+events, as well as the (fractional) distance uncertainty and inclination
+uncertainty observed in actual GW events at comparable S/N.  Figure
+\ref{fig:distance-iota} shows the inferred distance and inclination from our
+model for a GW170817-like event ($\rho \simeq 30$, $x \simeq -1$); our model's
+inferences compare directly to those for GW170817 itself \citep{Abbott2017}.
+
+\begin{figure}
+    \script{distance-iota.py}
+    \includegraphics[width=\columnwidth]{figures/distance-iota.pdf}
+    \caption{\label{fig:distance-iota} Posterior on distance $d$ and $x = \cos
+    \iota$ for a GW170817-like event ($\rho \simeq 30$) from our observational
+    model.  Contour levels correspond to succesive 10\% credible intervals; true
+    parameters are indicated by the black lines.  Compare to Figure 2 of
+    \citet{Abbott2017}.  The fractional uncertainty on $d$ after marginalizing
+    over $x$ with an isotropic (flat) prior is $\sigma_d / \left\langle d
+    \right\rangle \simeq 0.14$; for GW170817 the same quantity is also $\sigma_d
+    / \left\langle d \right\rangle \simeq \sigma_{H_0} / \left\langle H_0
+    \right\rangle \simeq 0.14$ \citep{Abbott2017}.  Similarly, our model has
+    $x_{84\%} \simeq -0.82$, while for GW170817 the equivalent 1-$\sigma$ upper
+    limit on $x \simeq -0.81$ \citep{Abbott2017}.  Our model thus does a
+    reasonable job reproducing the correlation between distance and inclination
+    and the relevant uncertainties at the S/N of GW170817; in both our model and
+    a full analysis of a GW event uncertainties will scale inversely with S/N.}
+\end{figure}
+
+\begin{acknowledgments}
+    We thank [people] for conversations.
+\end{acknowledgments}
+
+\software{\texttt{arviz} \citep{arviz_2019}, \texttt{matplotlib} \citep{Hunter:2007}, \texttt{pymc} \citep{salvatier2016probabilistic}, \texttt{seaborn} \citep{Waskom2021}, \texttt{showyourwork} \citep{Luger2021}}
 
 \bibliography{bib}
 
