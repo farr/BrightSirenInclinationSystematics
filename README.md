@@ -22,3 +22,7 @@ inclination dependence in detection of bright counterparts to GW mergers.  The
 TL;DR is that, by fitting out the inclination dependence of EM detections with
 fairly simple models, we can remove what otherwise would be a bias that could
 prevent percent-level expansion history measurements with bright sirens.
+
+This repository uses Rodrigo Luger's
+[showyourwork](https://github.com/showyourwork/showyourwork) package for
+reproducable science.
