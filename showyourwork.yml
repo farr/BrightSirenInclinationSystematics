@@ -1,3 +1,14 @@
 version: 0.3.1
 
-
+dependencies:
+  src/scripts/distance-iota.py:
+    - src/data/GW170817-like-chain.nc
+  src/scripts/H0-P2.py:
+    - src/data/Pl_2_chains.nc
+    - src/data/Pl_2_fixed_chains.nc
+    - src/data/Pl_2_no_fit_chains.nc
+  src/scripts/inclination-P2.py:
+    - src/data/Pl_2_chains.nc
+  src/scripts/top-hat-Pdet.py:
+    - src/data/top_hat_chains.nc
+    - src/data/top_hat_flat_inclination_chains.nc

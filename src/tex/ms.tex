@@ -1,6 +1,13 @@
 \documentclass[modern]{aastex631}
 \usepackage{showyourwork}
 
+\newcommand{\todo}[1]{\textcolor{blue}{TODO: #1}}
+
+\newcommand{\dd}{\mathrm{d}}
+
+\newcommand{\detected}{\mathrm{det}}
+\newcommand{\EM}{\mathrm{EM}}
+\newcommand{\GW}{\mathrm{GW}}
 \newcommand{\obs}{\mathrm{obs}}
 
 \newcommand{\cca}{Center for Computational Astrophysics, Flatiron Institute, New York NY 10010, USA}
@@ -72,29 +79,232 @@ inferences compare directly to those for GW170817 itself \citep{Abbott2017}.
 \begin{figure}
     \script{distance-iota.py}
     \includegraphics[width=\columnwidth]{figures/distance-iota.pdf}
-    \caption{\label{fig:distance-iota} Posterior on distance $d$ and $x = \cos
-    \iota$ for a GW170817-like event ($\rho \simeq 30$) from our observational
-    model.  Contour levels correspond to succesive 10\% credible intervals; true
-    parameters are indicated by the black lines.  Compare to Figure 2 of
-    \citet{Abbott2017}.  The fractional uncertainty on $d$ after marginalizing
-    over $x$ with an isotropic (flat) prior is $\sigma_d / \left\langle d
-    \right\rangle \simeq 0.14$; for GW170817 the same quantity is also $\sigma_d
-    / \left\langle d \right\rangle \simeq \sigma_{H_0} / \left\langle H_0
-    \right\rangle \simeq 0.14$ \citep{Abbott2017}.  Similarly, our model has
-    $x_{84\%} \simeq -0.82$, while for GW170817 the equivalent 1-$\sigma$ upper
-    limit on $x \simeq -0.81$ \citep{Abbott2017}.  Our model thus does a
-    reasonable job reproducing the correlation between distance and inclination
-    and the relevant uncertainties at the S/N of GW170817; in both our model and
-    a full analysis of a GW event uncertainties will scale inversely with S/N.}
+    \caption{Posterior on distance $d$ and $x = \cos \iota$ for a GW170817-like
+    event ($\rho \simeq 30$) from our observational model.  Contour levels
+    correspond to succesive 10\% credible intervals; true parameters are
+    indicated by the black lines.  Compare to Figure 2 of \citet{Abbott2017}.
+    The fractional uncertainty on $d$ after marginalizing over $x$ with an
+    isotropic (flat) prior is $\sigma_d / \left\langle d \right\rangle \simeq
+    0.14$; for GW170817 the same quantity is also $\sigma_d / \left\langle d
+    \right\rangle \simeq \sigma_{H_0} / \left\langle H_0 \right\rangle \simeq
+    0.14$ \citep{Abbott2017}.  Similarly, our model has $x_{84\%} \simeq -0.82$,
+    while for GW170817 the equivalent 1-$\sigma$ upper limit on $x \simeq -0.81$
+    \citep{Abbott2017}.  Our model thus does a reasonable job reproducing the
+    correlation between distance and inclination and the relevant uncertainties
+    at the S/N of GW170817; in both our model and a full analysis of a GW event
+    uncertainties will scale inversely with S/N.}
+    \label{fig:distance-iota}
 \end{figure}
 
 \subsection{Effect of EM Selection}
 
+We assume that each of our observations also has a detection of an
+electromagnetic counterpart that gives a perfect measurement of redshift, thus
+constraining $H_0$.  The full likelihood for both GW and EM data for an observation factorizes because the measurement noise for the observations are independent:
+\begin{equation}
+    p\left( d_\GW, d_\EM \mid x, d, H_0 \right) = p\left( d_\GW \mid x, d \right) p\left( d_\EM \mid x, d, H_0 \right).
+\end{equation}
+The first term is the likelhood representing the measurement model described
+above; the second term relates the EM measurements to the inclination, distance,
+and (through the distance-redshift relation) $H_0$.  If we were willing to model
+the dependence of the EM data on $x$, we could use it to further constrain the
+inclination measurement and thereby improve the $H_0$ measurement.  But here we
+suppose that this is not possible---either we feel that the inclination modeling
+for the EM data is systematics-dominated, or we are unable to even produce a
+model of the inclination-dependent emission being measured.  In this case we can
+marginalize the EM data out of the likelihood, retaining only (1) the redshift
+measurement and (2) the knowledge that the EM emission was detectable.  Let $\Omega$ be the set of EM data consistent with these criteria.  Then
+\begin{equation}
+    \int_{d_\EM \in \Omega} \dd d_\EM \, p\left( d_\EM \mid x, d, H_0 \right) \propto \delta\left( z - H_0 d \right) P_\mathrm{det,\EM}\left( x, d, H_0 \right),
+\end{equation}
+where $P_{\detected,\EM}\left(x, d, H_0\right)$ is the fraction of mergers with
+inclination $x$, at distance $d$, and with Hubble constant $H_0$ that produce
+detectable EM emission \citep{Mandel2019}.
+
+If we had a good model for the EM emission, we could \emph{calculate}
+$P_{\detected,\EM}$; but if we do not, we can treat it as a parameterized
+function, and learn its shape from the GW data.  (Intuitively: the GW data carry
+some information about the inclination of each event; considering the set of
+events with coincident EM detections lets us learn the population of
+inclinations for \emph{just these} events, which is proportional to
+$P_{\detected,\EM}$.)  The term $P_{\detected,\EM}$ acts like a modification of
+the prior applied to $x$, $d$, and $H_0$ in the overall analysis.  After
+integrating out the EM data in $\Omega$, we obtain a modified GW likelihood:
+\begin{multline}
+    p\left( d_\GW, z \mid x, d, H_0 \right) = \int_{d_\EM \in \Omega} \dd d_\EM p\left( d_\GW \mid x, d \right) p\left( d_\EM \mid x, d, H_0 \right) \\ \propto \delta\left( z - H_0 d \right) p\left( d_\GW \mid x, d \right) P_{\detected,\EM}\left( x, d, H_0 \right).
+\end{multline}
+
+Applying a $d^2$ prior and integrating across the $\delta$ function, we obtain 
+\begin{multline}
+    p\left( d_\GW, z \mid x, H_0 \right) \propto \int \dd d \, p\left( d_\GW, z \mid x, d, H_0 \right) d^2 \\ = \frac{z^2}{H_0^3} P_{\detected,\EM}\left( x, d = z/H_0, H_0 \right) p\left( d_\GW \mid x, d=z/H_0 \right).
+\end{multline}
+Here we see that $P_{\detected,\EM}$ acts as an additional multiplicative
+factor, appearing as a modification to the isotropic prior that we would
+naturally apply for the inclination of our gravitational wave population.
+
+\todo{Flesh this out, and discuss GW selection (mechanical, and our model, with
+$\rho > 10$); and then get specific about our model for $P_{\detected,\EM}$.
+Also discuss ``joint'' catalogs, like combining GRB-selected and
+kilonova-selected data sets.}
+
+\subsection{Functional Form of $P_{\detected,\EM}$}
+
+Here for simplicity we assume 
+\begin{itemize}
+    \item $P_{\detected,\EM}$ does not depend on $d$ wherever GW events are
+    detectable.  That is: the distance-dependence of selection effects is
+    dominated by the GW selection-function.
+    \item $P_{\detected,\EM}$ is independent of $H_0$.  This will be the case
+    whenever the choice of EM survey strategy / catalog selection does not
+    depend on the redshift of the EM sources.  For example, a flux-limited
+    survey of GW localization volumes would have a detection efficiency that is
+    independent of $H_0$; a survey that focuses on objects with
+    spectroscopically-measured redshifts consistent with the GW $d$ would have a
+    selection function that is strongly-dependent on $H_0$.
+\end{itemize}
+With these assumptions, $P_{\detected,\EM}$ is varies only with $x$.  We propose
+to use an expansion of $P_{\detected,\EM}$ in Legendre polynomials to model and
+learn the EM selection function.  Since $P_{\detected,\EM}$ must always be
+positive, we write
+\begin{equation}
+    \label{eq:Pdet-model}
+    \log P_{\detected,\EM}\left( x, d, H_0 \right) = \sum_{l=1}^{N_l} A_l P_l(x)
+\end{equation}
+(The normalization of $P_{\detected,\EM}$ does not affect the likelihood; here
+we have fixed the normalization by omitting the constant $P_0(x) = 1$ term from
+the sum.)  The $A = \left\{ A_l \mid l = 1, \ldots, N_l \right\}$ are additional
+parameters of our population model that we will infer.
+
+Some anticipated inclination-dependent selection effects fit naturally into this
+form (e.g.\ kilonovae are expected to have significant emission into all viewing
+angles \todo{citations}); others do not (e.g.\ GRB detections require a small
+viewing angle \todo{citations}).  We will show below that even for the latter
+case, where $P_{\detected,\EM}$ varies strongly---even discontinuously---with
+$x$, the smooth Legendre polynomial interpolation is sufficient to reduce
+systematics below the percent-level in a realistic measurement.
+
+\section{Examples}
+
+\subsection{Fitting Weakly Variable EM Selection}
+\label{sec:weakly-variable}
+
+Let 
+\begin{equation}
+    \label{eq:weakly-variable-efficiency}
+    \log P_{\detected,\EM}(x) = P_2(x) = \frac{1}{2}\left( 3 x^2 - 1 \right),
+\end{equation}
+and $N_l = 2$.  We generate a mock catalog of $N = 128$ GW+EM detections with
+S/N $\rho > 10$, and $H_0 = 0.7$, and calculate the joint posterior on $H_0$, $A
+= \left\{ A_1, A_2 \right\}$, and each event's $x$.  Figure
+\ref{fig:inclination-P2} shows that we recover the intrinsic inclination
+distribution of these events well.
+
+\begin{figure}
+    \script{inclination-P2.py}
+    \includegraphics[width=\columnwidth]{figures/inclination-P2.pdf}
+    \caption{The posterior on the EM detection efficiency inferred from 128 mock
+    GW+EM detections with the EM detection efficiency described in \S\
+    \ref{sec:weakly-variable}.  The blue line gives the posterior median; bands
+    give the 68\% and 95\% credible intervals.  The black line is the true
+    detection efficiency used to generate the mock data set (Eq.
+    \eqref{eq:weakly-variable-efficiency}).}
+    \label{fig:inclination-P2} 
+\end{figure}
+
+Ultimately, fitting the EM selection effects with this dataset results in
+recovery of $H_0 = \variable{output/H0-P2.txt}$ (median and 68\% credible
+interval, i.e.\ sub-percent uncertainty). Failing to account for the
+inclination-dependent EM selection effect introduces significant bias in the
+$H_0$ estimate, recovering $H_0 = \variable{output/H0-P2-nofit.txt}$
+\citep{Chen2020}.  Figure \ref{fig:H0-P2} illustrates these effects.
+
+\begin{figure}
+    \script{H0-P2.py}
+    \includegraphics[width=\columnwidth]{figures/H0-P2.pdf}
+    \caption{Posterior on $H_0$ for the mock catalog discussed in \S\,
+    \ref{sec:weakly-variable}.  The blue curve is the posterior when fitting
+    $P_{\detected,\EM}$ with $N_l = 2$.  The fitted value is $H_0 =
+    \variable{output/H0-P2.txt}$ (median and 68\% credible interval).  The
+    orange curve is the posterior ignoring inclination-dependent EM selection
+    effects, which results in $H_0 = \variable{output/H0-P2-nofit.txt}$, a $\sim
+    2\sigma$ bias.  The black vertical line is the true $H_0$ used to generate
+    the catalog.}
+    \label{fig:H0-P2}
+\end{figure}
+
+\subsection{Fitting a Strongly Variable EM Selection}
+\label{sec:strongly-variable}
+
+Different EM counterparts will exhibit different dependence on inclination
+angle.  In this subsection, we model an GW+EM catalog composed of two
+components.  One component has EM detectable emission only very close to on/off
+axis, with $P_{\detected,\EM} = 0$ unless $|x| \geq x_\mathrm{min}$ with
+$x_\mathrm{min} = \cos 15^\circ$.  The other component has a (weak) preference
+for on/off axis emission, with detectability varying quadratically from a
+maximum at $|x| = 1$ to and 50\% of its maximum value at $x = 0$.  The two
+components are mixed equally in the data set, so that the overall EM detection
+efficiency is 
+\begin{equation}
+    P_{\detected,\EM}(x) \propto \frac{1}{2} \left( \frac{H\left( |x| - x_\mathrm{min} \right)}{x_\mathrm{min}} + \frac{3 \left( x^2 + 1/2 \right)}{5} \right),
+\end{equation}
+with $H$ the Heaviside step function.  We choose $N_l = 4$.  The logarithm of
+this function is not expressible as any finite sum of Legendre polynomials, so
+our model is incapable of exactly reproducing the shape of this detection
+efficiency.  Nonetheless, we will see that we can still obtain sub-percent
+accurate, un-biased estimates of $H_0$.
+
+Once again, we generate a catalog of $N = 128$ GW+EM mock detections with S/N
+$\rho > 10$ using $H_0 = 0.7$.  We recover a $P_{\detected,\EM}$ shape that is
+indicative of the EM detection efficiency, but the true efficiency lies well
+outside the posterior 95\% credible interval over much of the range $-1 < x <
+1$.  Figure \ref{fig:top-hat-Pdet} shows the posterior on $P_{\detected,\EM}$.
+
+\begin{figure}
+    \script{top-hat-Pdet.py}
+    \includegraphics[width=\columnwidth]{figures/top-hat-Pdet.pdf}
+    \caption{Posterior on $P_{\detected,\EM}$ from fitting the mock catalog
+    described in \S\, \ref{sec:strongly-variable}.  The catalog is an equal
+    mixture of an on/off axis component ($|x| > \cos 15^\circ$) and a
+    quadratically-varying component; the true $P_{\detected,\EM}$ is shown by
+    the black curve.  The blue line shows the posterior median, and the dark and
+    light bands the posterior 68\% and 95\% credible intervals.  For most of the
+    interval $-1 < x < 1$ the true detection efficiency is well outside the
+    posterior 95\% credible interval due to the mismatch between the Legendre
+    polynomial fitting function, Eq.\ \eqref{eq:Pdet-model} with $N_l = 4$, and
+    the sharply-varying detection efficiency.}
+    \label{fig:top-hat-Pdet}
+\end{figure}
+
+Even though the posterior on the detection efficiency does favors curves very
+different to the true detection efficiency, the posterior on $H_0$ is not
+biased.  The imperfect measurements of inclination from the GW data ``soften''
+the bias in the recovery of the detection efficiency enough to recover the a
+reasonable posterior on $H_0$.  This is shown in Figure \ref{fig:H0-top-hat},
+which also shows that failing to account for the inclination-dependent selection
+effects here leads to very significant bias in the recovered $H_0$ value.
+
+\begin{figure}
+    \script{H0-top-hat.py}
+    \includegraphics[width=\columnwidth]{figures/H0-top-hat.pdf}
+    \caption{Posterior on $H_0$ from fitting the mock catalog described in \S\,
+    \ref{sec:strongly-variable}.  The vertical black line shows $H_0 = 0.7$, the
+    value used to prepare the catalog.  The blue curve shows the posterior when
+    fitting $P_{\detected,\EM}$ using Eq.\ \eqref{eq:Pdet-model} with $N_l=4$.
+    In this case we find $H_0 = \variable{output/H0-top-hat.txt}$ (median and
+    68\% credible interval).  The orange curve shows the posterior when fitting
+    without accounting for inclination-dependent EM selection.  In this case we
+    find $H_0 = \variable{output/H0-top-hat-flat.txt}$, with $\sim 8 \sigma$
+    bias.}
+    \label{fig:H0-top-hat}
+\end{figure}
+
 \begin{acknowledgments}
-    We thank [people] for conversations.
+    \todo{We thank people for stuff.}
 \end{acknowledgments}
 
 \software{\texttt{arviz} \citep{arviz_2019}, \texttt{matplotlib} \citep{Hunter:2007}, \texttt{pymc} \citep{salvatier2016probabilistic}, \texttt{seaborn} \citep{Waskom2021}, \texttt{showyourwork} \citep{Luger2021}}
+
+\clearpage
 
 \bibliography{bib}
 
