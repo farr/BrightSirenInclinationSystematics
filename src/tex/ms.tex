@@ -243,7 +243,7 @@ components.  One component has EM detectable emission only very close to on/off
 axis, with $P_{\detected,\EM} = 0$ unless $|x| \geq x_\mathrm{min}$ with
 $x_\mathrm{min} = \cos 15^\circ$.  The other component has a (weak) preference
 for on/off axis emission, with detectability varying quadratically from a
-maximum at $|x| = 1$ to and 50\% of its maximum value at $x = 0$.  The two
+maximum at $|x| = 1$ to and 1/3 of its maximum value at $x = 0$.  The two
 components are mixed equally in the data set, so that the overall EM detection
 efficiency is 
 \begin{equation}
@@ -252,8 +252,9 @@ efficiency is
 with $H$ the Heaviside step function.  We choose $N_l = 4$.  The logarithm of
 this function is not expressible as any finite sum of Legendre polynomials, so
 our model is incapable of exactly reproducing the shape of this detection
-efficiency.  Nonetheless, we will see that we can still obtain sub-percent
-accurate, un-biased estimates of $H_0$.
+efficiency for any choice of $N_l$.  Nonetheless, we will see that we can still
+obtain sub-percent accurate, un-biased estimates of $H_0$, even with only four
+additional parameters to describe the EM selection function.
 
 Once again, we generate a catalog of $N = 128$ GW+EM mock detections with S/N
 $\rho > 10$ using $H_0 = 0.7$.  We recover a $P_{\detected,\EM}$ shape that is

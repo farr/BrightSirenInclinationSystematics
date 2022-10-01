@@ -34,5 +34,7 @@ plt.xlabel(r'$x$')
 plt.ylabel(r'$P_{\mathrm{det},\mathrm{EM}}(x)$')
 plt.legend()
 
+plt.ylim(bottom=0)
+
 plt.tight_layout()
 plt.savefig(op.join(paths.figures, 'top-hat-Pdet.pdf'))
