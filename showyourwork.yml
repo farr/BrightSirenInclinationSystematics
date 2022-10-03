@@ -12,3 +12,11 @@ dependencies:
   src/scripts/top-hat-Pdet.py:
     - src/data/top_hat_chains.nc
     - src/data/top_hat_flat_inclination_chains.nc
+  src/scripts/H0-top-hat.py:
+    - src/data/top_hat_chains.nc
+    - src/data/top_hat_flat_inclination_chains.nc
+  src/scripts/top-hat-flat-compare.py:
+    - src/data/top_hat_chains.nc
+    - src/data/top_hat_flat_comparison.nc
+  src/scripts/flat-Pdet.py:
+    - src/data/top_hat_flat_comparison.nc

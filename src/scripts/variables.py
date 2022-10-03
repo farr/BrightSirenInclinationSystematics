@@ -24,3 +24,7 @@ with open(op.join(paths.output, 'H0-top-hat.txt'), 'w') as out:
     out.write(H0_format(*H0_range('top_hat_chains.nc')))
 with open(op.join(paths.output, 'H0-top-hat-flat.txt'), 'w') as out:
     out.write(H0_format(*H0_range('top_hat_flat_inclination_chains.nc')))
+
+# Comparison from top hat versus flat catalog
+with open(op.join(paths.output, 'H0-flat-comparison.txt'), 'w') as out:
+    out.write(H0_format(*H0_range('top_hat_flat_comparison.nc')))

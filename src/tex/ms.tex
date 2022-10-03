@@ -244,8 +244,8 @@ axis, with $P_{\detected,\EM} = 0$ unless $|x| \geq x_\mathrm{min}$ with
 $x_\mathrm{min} = \cos 15^\circ$.  The other component has a (weak) preference
 for on/off axis emission, with detectability varying quadratically from a
 maximum at $|x| = 1$ to and 1/3 of its maximum value at $x = 0$.  The two
-components are mixed equally in the data set, so that the overall EM detection
-efficiency is 
+components are mixed equally in the population of binary mergers, so that the
+overall EM detection efficiency is 
 \begin{equation}
     P_{\detected,\EM}(x) \propto \frac{1}{2} \left( \frac{H\left( |x| - x_\mathrm{min} \right)}{x_\mathrm{min}} + \frac{3 \left( x^2 + 1/2 \right)}{5} \right),
 \end{equation}
@@ -296,9 +296,54 @@ effects here leads to very significant bias in the recovered $H_0$ value.
     In this case we find $H_0 = \variable{output/H0-top-hat.txt}$ (median and
     68\% credible interval).  The orange curve shows the posterior when fitting
     without accounting for inclination-dependent EM selection.  In this case we
-    find $H_0 = \variable{output/H0-top-hat-flat.txt}$, with $\sim 8 \sigma$
+    find $H_0 = \variable{output/H0-top-hat-flat.txt}$, with $\sim 6 \sigma$
     bias.}
     \label{fig:H0-top-hat}
+\end{figure}
+
+With this choice of EM detection efficiency, we observe a counterpart in about
+15\% of the GW-detectable systems.  It is interesting to ask whether the
+improvement in inclination estimation from the structured EM emission (and
+therefore improved distance estimation from the GW observations) outweighs the
+loss of sources compared to a scenario where the EM emission is uniform.  (In
+other words, would it be better to employ a search strategy that selects sources
+that are likely to have anisotropic EM emission in order to improve distance
+estimates?)  For this distribution, a catalog with $1/0.15 \sim 7$ times as many
+sources with isotropic EM emission provides overall a better Hubble parameter
+measurement, as shown in Figure \ref{fig:top-hat-flat-compare}.  (For both mock
+catalogs, we employ $N_l = 4$, allowing for the same possibility of structure in
+the EM emission; the inferred $P_{\detected,\EM}$ for the catalog with isotropic
+emission is shown in Figure \ref{fig:flat-Pdet}.)
+
+\begin{figure}
+    \script{top-hat-flat-compare.py}
+    \includegraphics[width=\columnwidth]{figures/top-hat-flat-compare.pdf}
+    \caption{Comparison between $H_0$ inferred from a mock catalog with the
+    anisotropic EM emission discussed in \S\ \ref{sec:strongly-variable} (blue
+    curve) with a catalog with an equivalent GW merger rate but isotropic
+    emission (and therefore $\sim 7$ times as many detections; orange curve).
+    The improved catalog size from the isotropic emission overcomes the improved
+    distance estimates from the knowledge of inclination gained from the
+    anisotropic emission, and the overall measurement is tighter.  We find the
+    posterior median and 68\% credible interval $H_0 =
+    \variable{output/H0-top-hat.txt}$ from the catalog with anisotropic EM
+    emission, and $H_0 = \variable{output/H0-flat-comparison.txt}$ from the
+    larger catalog with isotropic emission.}
+    \label{fig:top-hat-flat-compare}
+\end{figure}
+
+\begin{figure}
+    \script{flat-Pdet.py}
+    \includegraphics[width=\columnwidth]{figures/flat-Pdet.pdf}
+    \caption{The inferred inclination distribution for the catalog with
+    isotropic EM emission and equivalent GW merger to the anisotropic emission
+    described in \S\ \ref{sec:strongly-variable}.  The blue line gives the
+    posterior median and the dark and light bands the posterior 68\% and 95\%
+    credible interval.  Even though the EM emission is isotropic, we fit the
+    detection efficiency with $N_l = 4$ for a fair comparison with the (smaller)
+    catalog of anisotropic sources whose inferred inclination distribution is
+    shown in Figure \ref{fig:top-hat-Pdet}.}
+    \label{fig:flat-Pdet}
 \end{figure}
 
 \begin{acknowledgments}
@@ -308,7 +353,9 @@ effects here leads to very significant bias in the recovered $H_0$ value.
     stimulating environment.
 \end{acknowledgments}
 
-\software{\texttt{arviz} \citep{arviz_2019}, \texttt{matplotlib} \citep{Hunter:2007}, \texttt{pymc} \citep{salvatier2016probabilistic}, \texttt{seaborn} \citep{Waskom2021}, \texttt{showyourwork} \citep{Luger2021}}
+\software{\texttt{arviz} \citep{arviz_2019}, \texttt{matplotlib}
+\citep{Hunter:2007}, \texttt{pymc} \citep{salvatier2016probabilistic},
+\texttt{seaborn} \citep{Waskom2021}, \texttt{showyourwork} \citep{Luger2021}}
 
 \clearpage
 

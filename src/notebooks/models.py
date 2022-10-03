@@ -50,7 +50,6 @@ def draw_gws(P_det, N, fr=1.0, fl=1.0, h=0.7, dmax=0.5, rho_thresh=10):
     Al = []
     Ar = []
 
-    N = 2048
     Ndraw = 0
     with tqdm(total=N) as bar:
         while len(x_true) < N:
