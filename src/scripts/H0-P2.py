@@ -14,6 +14,7 @@ trace_nofit = az.from_netcdf(op.join(paths.data, 'Pl_2_no_fit_chains.nc'))
 dim = ['chain', 'draw']
 
 sns.kdeplot(trace.posterior.h.stack(dim=dim), label=r'Fit $P_{\mathrm{det},\mathrm{EM}}$')
+sns.kdeplot(trace_fixed.posterior.h.stack(dim=dim), label=r'Fix $P_{\mathrm{det},\mathrm{EM}}$')
 sns.kdeplot(trace_nofit.posterior.h.stack(dim=dim), label=r'Ignore $P_{\mathrm{det},\mathrm{EM}}$')
 
 plt.axvline(0.7, color='k')

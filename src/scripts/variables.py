@@ -16,6 +16,9 @@ def H0_format(m, h, l):
 with open(op.join(paths.output, 'H0-P2.txt'), 'w') as out:
     out.write(H0_format(*H0_range('Pl_2_chains.nc')))
 
+with open(op.join(paths.output, 'H0-P2-fixed.txt'), 'w') as out:
+    out.write(H0_format(*H0_range('Pl_2_fixed_chains.nc')))
+
 with open(op.join(paths.output, 'H0-P2-nofit.txt'), 'w') as out:
     out.write(H0_format(*H0_range('Pl_2_no_fit_chains.nc')))
 

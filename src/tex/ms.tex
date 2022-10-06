@@ -225,12 +225,15 @@ $H_0$ estimate, recovering $H_0 = \variable{output/H0-P2-nofit.txt}$
     \includegraphics[width=\columnwidth]{figures/H0-P2.pdf}
     \caption{Posterior on $H_0$ for the mock catalog discussed in \S\,
     \ref{sec:weakly-variable}.  The blue curve is the posterior when fitting
-    $P_{\detected,\EM}$ with $N_l = 2$.  The fitted value is $H_0 =
+    $P_{\detected,\EM}$ with $N_l = 2$.  We find $H_0 =
     \variable{output/H0-P2.txt}$ (median and 68\% credible interval).  The
-    orange curve is the posterior ignoring inclination-dependent EM selection
-    effects, which results in $H_0 = \variable{output/H0-P2-nofit.txt}$, a $\sim
-    2\sigma$ bias.  The black vertical line is the true $H_0$ used to generate
-    the catalog.}
+    orange curve is the posterior when $P_{\detected,\EM}$ is fixed to its true
+    value (i.e.\ we assume we know the EM selection effect perfectly).  We find
+    $H_0 = \variable{output/H0-P2-fixed.txt}$, a 5 percent reduction in
+    uncertainty.  The green curve is the posterior ignoring
+    inclination-dependent EM selection effects, which results in $H_0 =
+    \variable{output/H0-P2-nofit.txt}$, a $\sim 2\sigma$ bias.  The black
+    vertical line is the true $H_0$ used to generate the catalog.}
     \label{fig:H0-P2}
 \end{figure}
 
