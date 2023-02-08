@@ -1,4 +1,4 @@
-import aesara.tensor as at
+import pytensor.tensor as pt
 import numpy as np
 import pymc as pm
 from tqdm import tqdm
@@ -32,15 +32,15 @@ def P_det(x, A):
     """
     return np.exp(log_P_det(x,A))
 
-def draw_gws(P_det, N, fr=1.0, fl=1.0, h=0.7, dmax=0.5, rho_thresh=10):
+def draw_gws(F_em, N, fr=1.0, fl=1.0, h=0.7, dmax=0.5, rho_thresh=10, F_thresh=25):
     """Returns `(em_detected, x_true, d_true, z_true, Al_true, Ar_true, Al, Ar,
     Ndraw)` for a population draw from our model.
+
+    `F_em` returns the expected EM counts in a Poisson detection model with
+    threshod `F_thresh` given a (cosine) inclination and distance:
+    `counts_expected = F_em(x,d)`.
     
     """
-    # We need to know the maximum value so we can rejection sample later
-    x = np.linspace(-1, 1, 1024)
-    Pdet_max = np.max(P_det(x))
-
     em_detected = []
     x_true = []
     d_true = []
@@ -73,7 +73,10 @@ def draw_gws(P_det, N, fr=1.0, fl=1.0, h=0.7, dmax=0.5, rho_thresh=10):
                 Al.append(Lobs)
                 Ar.append(Robs)
 
-                if np.random.uniform(low=0, high=Pdet_max) < P_det(x):
+                F_ex = F_em(x, d)
+                F_obs = np.random.poisson(F_ex)
+
+                if F_obs > F_thresh:
                     em_detected.append(True)
                 else:
                     em_detected.append(False)
@@ -86,7 +89,7 @@ def draw_gws(P_det, N, fr=1.0, fl=1.0, h=0.7, dmax=0.5, rho_thresh=10):
 
 def logsubexp(x, y):
     """`log(exp(x)-exp(y))` but computed stably."""
-    return x + at.log1p(at.exp(y-x))
+    return x + pt.log1p(pt.exp(y-x))
 
 def make_model(z_obs, Al_obs, Ar_obs, x_draw, Ndraw, fl=1.0, fr=1.0, fix_A = None, N_A = 2):
     N = len(z_obs)
@@ -98,25 +101,25 @@ def make_model(z_obs, Al_obs, Ar_obs, x_draw, Ndraw, fl=1.0, fr=1.0, fix_A = Non
         if fix_A is None:
             A = pm.Normal('A', mu=0, sigma=1, dims='LP_index')
         else:
-            A = pm.Deterministic('A', at.as_tensor(np.array(fix_A)), dims='LP_index')
+            A = pm.Deterministic('A', pt.as_tensor(np.array(fix_A)), dims='LP_index')
 
         x = pm.Uniform('x', lower=-1, upper=1, dims='event_index')
-        _ = pm.Potential('x_prior', at.sum(log_P_det(x, A, N_A)))
+        _ = pm.Potential('x_prior', pt.sum(log_P_det(x, A, N_A)))
 
         d = pm.Deterministic('d', z_obs / h, dims='event_index')
-        _ = pm.Potential('d_likelihood', at.sum(2*at.log(z_obs) - 3*at.log(h)))
+        _ = pm.Potential('d_likelihood', pt.sum(2*pt.log(z_obs) - 3*pt.log(h)))
 
         log_sel_wt = log_P_det(x_draw, A, N_A)
         log_sel_wt2 = 2.0*log_sel_wt
 
-        log_mu = at.logsumexp(log_sel_wt) - at.log(Ndraw)
-        log_s2 = logsubexp(at.logsumexp(log_sel_wt2) - 2*at.log(Ndraw), 2.0*log_mu - at.log(Ndraw))
+        log_mu = pt.logsumexp(log_sel_wt) - pt.log(Ndraw)
+        log_s2 = logsubexp(pt.logsumexp(log_sel_wt2) - 2*pt.log(Ndraw), 2.0*log_mu - pt.log(Ndraw))
 
-        Neff = pm.Deterministic('Neff', at.exp(2.0*log_mu - log_s2))
+        Neff = pm.Deterministic('Neff', pt.exp(2.0*log_mu - log_s2))
         _ = pm.Potential('selection_effect', -N*log_mu)
 
-        _ = pm.Normal('Ar_likelihood', mu=fr*at.square(1+x)/d, sigma=1, observed=Ar_obs, dims='event_index')
-        _ = pm.Normal('Al_likelihood', mu=fl*at.square(1-x)/d, sigma=1, observed=Al_obs, dims='event_index')
+        _ = pm.Normal('Ar_likelihood', mu=fr*pt.square(1+x)/d, sigma=1, observed=Ar_obs, dims='event_index')
+        _ = pm.Normal('Al_likelihood', mu=fl*pt.square(1-x)/d, sigma=1, observed=Al_obs, dims='event_index')
     return model
 
 def calculate_P_det(trace, Nx=256):
